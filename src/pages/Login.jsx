@@ -1,5 +1,8 @@
-import { Box, Button, Card, Field, Input, Stack } from "@chakra-ui/react";
+import { Box, Button, Card, Field, Input, Stack, Text } from "@chakra-ui/react";
 import { useState } from "react";
+import LabelledInputField from "../components/LabelledInputField";
+import { Link } from "react-router-dom";
+import { loginForm } from "../data/loginForm";
 
 function Login() {
   const [inputData, setInputData] = useState({
@@ -11,51 +14,51 @@ function Login() {
     console.log(inputData);
   };
 
+  const updateField = (fieldName, value) => {
+    setInputData((prev) => ({
+      ...prev,
+      [fieldName]: value,
+    }));
+  };
+
   return (
     <Box
       display="flex"
-      alignItems="center"
+      alignItems="flex-start"
       justifyContent="center"
       height="100vh"
       padding="4"
+      pt="32"
     >
       <Card.Root width="md">
         <Card.Header>
-          <Card.Title textAlign="center">Login</Card.Title>
+          <Card.Title fontSize="2xl" textAlign="center">
+            Login
+          </Card.Title>
         </Card.Header>
         <Card.Body>
           <Stack>
-            <Field.Root>
-              <Field.Label mb="2">Username</Field.Label>
-              <Input
-                value={inputData.username}
-                onChange={(e) =>
-                  setInputData((prev) => ({
-                    ...prev,
-                    username: e.target.value,
-                  }))
-                }
+            {loginForm.fields.map((field, index) => (
+              <LabelledInputField
+                key={index}
+                label={field.label}
+                value={inputData[field.name]}
+                type={field.type}
+                onChange={(e) => updateField(field.name, e.target.value)}
               />
-            </Field.Root>
-            <Field.Root>
-              <Field.Label mb="2">Password</Field.Label>
-              <Input
-                value={inputData.password}
-                type="password"
-                onChange={(e) =>
-                  setInputData((prev) => ({
-                    ...prev,
-                    password: e.target.value,
-                  }))
-                }
-              />
-            </Field.Root>
+            ))}
           </Stack>
         </Card.Body>
-        <Card.Footer justifyContent="center">
-          <Button width="full" onClick={handleLogin}>
+        <Card.Footer flexDirection="column" justifyContent="center">
+          <Button width="full" onClick={handleLogin} mb="2">
             Login
           </Button>
+          <Card.Description>
+            Don't have an account? Create one{" "}
+            <Text as="span" textDecoration="underline">
+              <Link to="/register">here</Link>
+            </Text>
+          </Card.Description>
         </Card.Footer>
       </Card.Root>
     </Box>

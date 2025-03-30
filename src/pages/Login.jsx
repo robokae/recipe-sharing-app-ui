@@ -37,13 +37,14 @@ function Login() {
           </Card.Title>
         </Card.Header>
         <Card.Body>
-          <Stack>
+          <Stack gap="4">
             {loginForm.fields.map((field, index) => (
               <LabelledInputField
                 key={index}
                 label={field.label}
                 value={inputData[field.name]}
                 type={field.type}
+                placeholder={field.placeholder}
                 onChange={(e) => updateField(field.name, e.target.value)}
               />
             ))}

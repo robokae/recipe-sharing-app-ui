@@ -2,33 +2,33 @@ export const registerForm = {
   fields: [
     {
       name: "firstName",
-      label: "First name",
       type: "text",
+      placeholder: "First name",
     },
     {
       name: "lastName",
-      label: "Last name",
       type: "text",
+      placeholder: "Last name",
     },
     {
       name: "email",
-      label: "Email",
       type: "text",
+      placeholder: "Email",
     },
     {
       name: "username",
-      label: "Username",
       type: "text",
+      placeholder: "Username",
     },
     {
       name: "password",
-      label: "Password",
       type: "password",
+      placeholder: "Password",
     },
     {
       name: "passwordConfirmation",
-      label: "Confirm password",
       type: "password",
+      placeholder: "Confirm password",
     },
   ],
 };

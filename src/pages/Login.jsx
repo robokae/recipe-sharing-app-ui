@@ -1,36 +1,55 @@
-import { Box, Button, Card, Field, Input, Stack, Text } from "@chakra-ui/react";
-import { useState } from "react";
+import {
+  Box,
+  Button,
+  Card,
+  Center,
+  Field,
+  Input,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import LabelledInputField from "../components/LabelledInputField";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginForm } from "../data/loginForm";
+import { useApi } from "../hooks/useApi";
+import { useToken } from "../hooks/useToken";
 
 function Login() {
-  const [inputData, setInputData] = useState({
+  const [loginData, setLoginData] = useState({
     username: "",
     password: "",
   });
+  const { data, isLoading, callApi } = useApi();
+  const { setToken } = useToken();
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    console.log(inputData);
+  useEffect(() => {
+    setToken(null);
+  }, []);
+
+  const handleLogin = async () => {
+    const response = await callApi("/api/login", "POST", loginData);
+    if (response && response.status === 200) {
+      setToken(response.headers.authorization);
+      navigate("/");
+    }
   };
 
   const updateField = (fieldName, value) => {
-    setInputData((prev) => ({
+    setLoginData((prev) => ({
       ...prev,
       [fieldName]: value,
     }));
   };
 
   return (
-    <Box
-      display="flex"
-      alignItems="flex-start"
-      justifyContent="center"
-      height="100vh"
-      padding="4"
-      pt="32"
-    >
-      <Card.Root width="md">
+    <Center padding="4" mt="16">
+      <Card.Root
+        width="md"
+        borderWidth={["0", "1px"]}
+        background={["transparent", "gray.950"]}
+      >
         <Card.Header>
           <Card.Title fontSize="2xl" textAlign="center">
             Login
@@ -42,7 +61,7 @@ function Login() {
               <LabelledInputField
                 key={index}
                 label={field.label}
-                value={inputData[field.name]}
+                value={loginData[field.name]}
                 type={field.type}
                 placeholder={field.placeholder}
                 onChange={(e) => updateField(field.name, e.target.value)}
@@ -62,7 +81,7 @@ function Login() {
           </Card.Description>
         </Card.Footer>
       </Card.Root>
-    </Box>
+    </Center>
   );
 }
 

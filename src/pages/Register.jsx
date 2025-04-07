@@ -1,40 +1,45 @@
-import { Box, Button, Card, Field, Input, Stack, Text } from "@chakra-ui/react";
+import { Button, Card, Center, Stack, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import LabelledInputField from "../components/LabelledInputField";
 import { Link } from "react-router-dom";
 import { registerForm } from "../data/registerForm";
+import { useApi } from "../hooks/useApi";
 
 function Register() {
-  const [inputData, setInputData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    username: "",
-    password: "",
-    passwordConfirmation: "",
-  });
+  const [registrationData, setRegistrationData] = useState(
+    registerForm.fields.reduce((initialData, field) => {
+      initialData[field.name] = "";
+      return initialData;
+    }, {})
+  );
+  const { data, isLoading, error, callApi } = useApi();
+  const [errors, setErrors] = useState([]);
 
-  const handleRegister = () => {
-    console.log(inputData);
+  const handleRegister = async () => {
+    if (registrationData.password !== registrationData.passwordConfirmation) {
+      setErrors((prev) => [
+        ...prev,
+        { field: "passwordConfirmation", error: "Passwords do not match" },
+      ]);
+      return;
+    }
+    await callApi("/api/register", "POST", registrationData);
   };
 
   const updateField = (fieldName, value) => {
-    setInputData((prev) => ({
+    setRegistrationData((prev) => ({
       ...prev,
       [fieldName]: value,
     }));
   };
 
   return (
-    <Box
-      display="flex"
-      alignItems="flex-start"
-      justifyContent="center"
-      height="100vh"
-      padding="4"
-      pt="32"
-    >
-      <Card.Root width="md">
+    <Center padding="4" mt="16">
+      <Card.Root
+        width="md"
+        borderWidth={["0", "1px"]}
+        background={["transparent", "gray.950"]}
+      >
         <Card.Header>
           <Card.Title fontSize="2xl" textAlign="center">
             Sign up
@@ -45,7 +50,7 @@ function Register() {
             {registerForm.fields.map((field, index) => (
               <LabelledInputField
                 key={index}
-                value={inputData[field.name]}
+                value={registrationData[field.name]}
                 type={field.type}
                 placeholder={field.placeholder}
                 onChange={(e) => updateField(field.name, e.target.value)}
@@ -65,7 +70,7 @@ function Register() {
           </Card.Description>
         </Card.Footer>
       </Card.Root>
-    </Box>
+    </Center>
   );
 }
 

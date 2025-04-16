@@ -10,10 +10,12 @@ import {
 import { useApi } from "../hooks/useApi";
 import { useEffect, useState } from "react";
 import DesktopNavBar from "../components/DesktopNavBar";
+import { useAuth } from "../context/AuthProvider";
 
 function Home() {
-  const { data, isLoading, error, callApi } = useApi();
+  const { callApi } = useApi();
   const [recipes, setRecipes] = useState();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +33,7 @@ function Home() {
       <Center>
         <Box width={["md", "xl"]} mt="16" padding="4">
           <Heading fontSize="3xl" textAlign="center" mb="8">
-            Explore Recipes
+            {user ? `Hello ${user.firstName}!` : "Explore Recipes"}
           </Heading>
           <Box display="flex" flexDirection="column" gap="8">
             {recipes &&

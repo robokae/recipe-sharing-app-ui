@@ -4,18 +4,14 @@ export const useToken = () => {
   const TOKEN = "token";
 
   const getToken = () => {
-    try {
-      const authToken = sessionStorage.getItem(TOKEN);
-      return JSON.parse(authToken);
-    } catch (e) {
-      return null;
-    }
+    const authToken = localStorage.getItem(TOKEN);
+    return authToken ? JSON.parse(authToken) : null;
   };
 
   const [token, setToken] = useState(getToken());
 
   const saveToken = (authToken) => {
-    sessionStorage.setItem(TOKEN, JSON.stringify(authToken));
+    localStorage.setItem(TOKEN, JSON.stringify(authToken));
     setToken(authToken);
   };
 

@@ -1,12 +1,30 @@
-import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Flex,
+  Heading,
+  Text,
+} from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
 
 function DesktopNavBar() {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+  const handleSignout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <Box
-      width="full"
+      position="fixed"
+      top="0"
+      left="0"
+      width="100vw"
+      backgroundColor="black"
       borderBottom="1px solid"
       borderColor="gray.800"
       padding="4"
@@ -15,7 +33,13 @@ function DesktopNavBar() {
         <Link to="/">
           <Heading size="md">RecipeDB</Heading>
         </Link>
-        <Button onClick={() => navigate("/recipe/new")}>New Recipe</Button>
+        <ButtonGroup>
+          {user ? (
+            <Button onClick={handleSignout}>Sign out</Button>
+          ) : (
+            <Button onClick={() => navigate("/login")}>Sign in</Button>
+          )}
+        </ButtonGroup>
       </Flex>
     </Box>
   );

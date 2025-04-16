@@ -14,6 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginForm } from "../data/loginForm";
 import { useApi } from "../hooks/useApi";
 import { useToken } from "../hooks/useToken";
+import { useAuth } from "../context/AuthProvider";
 
 function Login() {
   const [loginData, setLoginData] = useState({
@@ -21,17 +22,15 @@ function Login() {
     password: "",
   });
   const { data, isLoading, callApi } = useApi();
-  const { setToken } = useToken();
+  const { login } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setToken(null);
-  }, []);
 
   const handleLogin = async () => {
     const response = await callApi("/api/login", "POST", loginData);
     if (response && response.status === 200) {
-      setToken(response.headers.authorization);
+      const token = response.headers.authorization;
+      const userDetails = response.data;
+      login(userDetails, token);
       navigate("/");
     }
   };

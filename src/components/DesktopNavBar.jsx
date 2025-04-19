@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Flex,
-  Heading,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Flex, Heading } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 

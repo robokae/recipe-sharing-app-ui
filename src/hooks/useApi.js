@@ -1,17 +1,10 @@
 import axios from "axios";
-import { useState } from "react";
 import { useToken } from "./useToken";
 
 export const useApi = () => {
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(null);
-  const [error, setError] = useState(null);
   const { token } = useToken();
 
   const callApi = async (url, method, payload) => {
-    setIsLoading(true);
-    setData(null);
-    setError(null);
     try {
       let response;
       if (method === "GET") {
@@ -24,15 +17,11 @@ export const useApi = () => {
           },
         });
       }
-      setData(response.data);
       return response;
     } catch (error) {
-      setError(error);
-      return null;
-    } finally {
-      setIsLoading(false);
+      return { error: error || "An unexpected error occurred" };
     }
   };
 
-  return { data, isLoading, error, callApi };
+  return { callApi };
 };

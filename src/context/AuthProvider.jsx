@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { useToken } from "../hooks/useToken";
-import { useNavigate } from "react-router-dom";
+import { useApi } from "../hooks/useApi";
 
 const AuthContext = createContext(null);
 
@@ -9,12 +9,32 @@ export default function AuthProvider({ children }) {
     const userDetails = localStorage.getItem("user");
     return userDetails ? JSON.parse(userDetails) : null;
   });
-  const { setToken } = useToken();
+  const { token, setToken } = useToken();
+  const { callApi } = useApi();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const login = (userDetails, authToken) => {
-    localStorage.setItem("user", JSON.stringify(userDetails));
-    setUser(userDetails);
-    setToken(authToken);
+  const login = async (loginRequest) => {
+    setError(null);
+    setIsLoading(true);
+    token && setToken(null);
+
+    const response = await callApi("/api/login", "POST", loginRequest);
+
+    if (response?.error) {
+      setError(response.error.response?.data || "An unexpected error occurred");
+      setIsLoading(false);
+      return false;
+    } else if (response.status === 200) {
+      const token = response.headers.authorization;
+      const userDetails = response.data;
+
+      localStorage.setItem("user", JSON.stringify(userDetails));
+      setUser(userDetails);
+      setToken(token);
+      setIsLoading(false);
+      return true;
+    }
   };
 
   const logout = () => {
@@ -24,7 +44,7 @@ export default function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, isLoading, error }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,19 +1,16 @@
 import {
+  Alert,
   Box,
   Button,
   Card,
   Center,
-  Field,
-  Input,
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LabelledInputField from "../components/LabelledInputField";
 import { Link, useNavigate } from "react-router-dom";
 import { loginForm } from "../data/loginForm";
-import { useApi } from "../hooks/useApi";
-import { useToken } from "../hooks/useToken";
 import { useAuth } from "../context/AuthProvider";
 
 function Login() {
@@ -21,16 +18,12 @@ function Login() {
     username: "",
     password: "",
   });
-  const { data, isLoading, callApi } = useApi();
-  const { login } = useAuth();
+  const { login, isLoading, error } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    const response = await callApi("/api/login", "POST", loginData);
-    if (response && response.status === 200) {
-      const token = response.headers.authorization;
-      const userDetails = response.data;
-      login(userDetails, token);
+    const isLoginSuccess = await login(loginData);
+    if (!isLoading && isLoginSuccess) {
       navigate("/");
     }
   };
@@ -54,7 +47,15 @@ function Login() {
             Login
           </Card.Title>
         </Card.Header>
-        <Card.Body>
+        <Card.Body gap="8">
+          {error && (
+            <Alert.Root width="full" status="warning" variant="surface">
+              <Alert.Indicator />
+              <Alert.Content>
+                <Alert.Description>{error?.message || error}</Alert.Description>
+              </Alert.Content>
+            </Alert.Root>
+          )}
           <Stack gap="4">
             {loginForm.fields.map((field, index) => (
               <LabelledInputField
@@ -69,7 +70,7 @@ function Login() {
           </Stack>
         </Card.Body>
         <Card.Footer flexDirection="column" justifyContent="center">
-          <Button width="full" onClick={handleLogin} mb="2">
+          <Button loading={isLoading} width="full" onClick={handleLogin} mb="2">
             Login
           </Button>
           <Card.Description>

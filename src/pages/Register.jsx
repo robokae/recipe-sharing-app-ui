@@ -1,7 +1,7 @@
 import { Button, Card, Center, Stack, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import LabelledInputField from "../components/LabelledInputField";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { registerForm } from "../data/registerForm";
 import { useApi } from "../hooks/useApi";
 
@@ -12,8 +12,9 @@ function Register() {
       return initialData;
     }, {})
   );
-  const { data, isLoading, error, callApi } = useApi();
+  const { callApi } = useApi();
   const [errors, setErrors] = useState([]);
+  const navigate = useNavigate();
 
   const handleRegister = async () => {
     if (registrationData.password !== registrationData.passwordConfirmation) {
@@ -23,7 +24,9 @@ function Register() {
       ]);
       return;
     }
-    await callApi("/api/register", "POST", registrationData);
+
+    const response = await callApi("/api/register", "POST", registrationData);
+    response && navigate("/registerSuccess");
   };
 
   const updateField = (fieldName, value) => {

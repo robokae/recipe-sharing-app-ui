@@ -4,6 +4,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CreateRecipe from "./pages/CreateRecipe";
 import PrivateRoutes from "./components/PrivateRoutes";
+import RegisterSuccess from "./pages/RegisterSuccess";
+import MainLayout from "./components/layout/MainLayout";
 
 function App() {
   return (
@@ -11,9 +13,12 @@ function App() {
       <Route element={<PrivateRoutes />}>
         <Route path="/recipe/new" element={<CreateRecipe />} />
       </Route>
-      <Route path="/" element={<Home />} />
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Home />} />
+      </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/registerSuccess" element={<RegisterSuccess />} />
     </Routes>
   );
 }

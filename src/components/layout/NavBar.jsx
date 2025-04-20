@@ -1,22 +1,11 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  Flex,
-  Heading,
-} from "@chakra-ui/react";
+import { Button, Container, Flex, Heading } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
+import AccountMenu from "../AccountMenu";
 
 function NavBar() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-
-  const handleSignout = () => {
-    logout();
-    navigate("/");
-  };
 
   return (
     <Flex
@@ -37,13 +26,11 @@ function NavBar() {
         <Link to="/">
           <Heading size="md">RecipeDB</Heading>
         </Link>
-        <ButtonGroup>
-          {user ? (
-            <Button onClick={handleSignout}>Sign out</Button>
-          ) : (
-            <Button onClick={() => navigate("/login")}>Sign in</Button>
-          )}
-        </ButtonGroup>
+        {user ? (
+          <AccountMenu user={user} logout={logout} />
+        ) : (
+          <Button onClick={() => navigate("/login")}>Sign in</Button>
+        )}
       </Container>
     </Flex>
   );

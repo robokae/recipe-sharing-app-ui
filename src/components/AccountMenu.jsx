@@ -1,5 +1,5 @@
 import { Button, Menu, Portal } from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function AccountMenu({ user, logout }) {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ function AccountMenu({ user, logout }) {
 
   const handleSignout = () => {
     logout();
-    navigate("/");
+    navigate("/signoutSuccess");
   };
 
   return (
@@ -28,10 +28,12 @@ function AccountMenu({ user, logout }) {
             <Menu.Item cursor="pointer" value="profile">
               Profile
             </Menu.Item>
-            <Menu.Item cursor="pointer" value="sign-out" asChild>
-              <Link to="/" onClick={handleSignout}>
-                Sign out
-              </Link>
+            <Menu.Item
+              cursor="pointer"
+              value="sign-out"
+              onClick={handleSignout}
+            >
+              Sign out
             </Menu.Item>
           </Menu.Content>
         </Menu.Positioner>

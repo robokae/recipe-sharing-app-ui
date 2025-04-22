@@ -16,6 +16,7 @@ function NavBar() {
       borderColor="gray.800"
       pt="4"
       pb="4"
+      zIndex="overlay"
     >
       <Container
         display="flex"

@@ -12,19 +12,18 @@ export default function AuthProvider({ children }) {
   const { token, setToken } = useToken();
   const { callApi } = useApi();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const login = async (loginRequest) => {
-    setError(null);
     setIsLoading(true);
     token && setToken(null);
 
     const response = await callApi("/api/login", "POST", loginRequest);
 
     if (response?.error) {
-      setError(response.error.response?.data || "An unexpected error occurred");
       setIsLoading(false);
-      return false;
+      throw new Error(
+        response.error.response?.data || "An unexpected error occurred"
+      );
     } else if (response.status === 200) {
       const token = response.headers.authorization;
       const userDetails = response.data;
@@ -44,7 +43,7 @@ export default function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading, error }}>
+    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

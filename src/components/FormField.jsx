@@ -6,7 +6,7 @@ function FormField({ name, label, type, placeholder, register, errors }) {
       <Field.Label htmlFor={name}>{label && label}</Field.Label>
       <Input
         id={name}
-        type={type ?? "text"}
+        type={type || "text"}
         placeholder={placeholder}
         {...register(name)}
       />

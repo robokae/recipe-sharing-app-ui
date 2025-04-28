@@ -9,13 +9,13 @@ import {
 import { useEffect } from "react";
 import { LuUpload } from "react-icons/lu";
 
-function FileUploader({ maxFiles, fileTypes, handleFileChange }) {
+function FileUploader({ name, maxFiles, fileTypes, setValue }) {
   const fileUpload = useFileUpload({ maxFiles: maxFiles });
   const files = fileUpload.acceptedFiles;
 
   useEffect(() => {
-    handleFileChange(files);
-  }, [files]);
+    setValue(name, files);
+  }, [files, name, setValue]);
 
   const supportedFiles =
     fileTypes.length === 2

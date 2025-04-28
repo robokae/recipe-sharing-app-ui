@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import CreateRecipe from "./pages/CreateRecipe";
+import CreateRecipePage from "./pages/CreateRecipePage";
 import PrivateRoutes from "./components/PrivateRoutes";
 import RegisterSuccess from "./pages/RegisterSuccess";
 import MainLayout from "./components/layout/MainLayout";
@@ -13,7 +13,7 @@ function App() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route element={<PrivateRoutes />}>
-          <Route path="/recipe/new" element={<CreateRecipe />} />
+          <Route path="/recipe/new" element={<CreateRecipePage />} />
         </Route>
         <Route path="/" element={<Home />} />
       </Route>

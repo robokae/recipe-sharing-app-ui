@@ -1,56 +1,49 @@
 import {
   Box,
   Card,
-  Center,
   Flex,
+  Grid,
+  GridItem,
   Heading,
-  Stack,
   Text,
 } from "@chakra-ui/react";
-import { useApi } from "../hooks/useApi";
-import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthProvider";
+import SideMenu from "../components/layout/SideMenu";
+import { useFetchRecipe } from "../hooks/useFetchRecipe";
 
 function Home() {
-  const { callApi } = useApi();
-  const [recipes, setRecipes] = useState();
   const { user } = useAuth();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await callApi("/api/recipes", "GET");
-      if (response) {
-        setRecipes(response.data);
-      }
-    };
-    fetchData();
-  }, []);
+  const { recipes } = useFetchRecipe();
 
   return (
-    <Flex width="full" flexDirection="column" alignItems="center">
-      <Box width={["md", "xl"]}>
-        <Heading fontSize="3xl" textAlign="center" mb="8">
+    <Flex width="full" flexDirection="row" gap="8">
+      <SideMenu />
+      <Box flex="1" width={["md", "xl"]}>
+        <Heading fontSize="3xl" mb="8">
           {user ? `Hello ${user.firstName}!` : "Explore Recipes"}
         </Heading>
-        <Box display="flex" flexDirection="column" gap="8">
+        <Grid
+          templateColumns={[
+            "repeat(1, 1fr)",
+            "repeat(1, 1fr)",
+            "repeat(3, 1fr)",
+          ]}
+          gap={("2", "2", "4")}
+        >
           {recipes &&
             recipes.map((recipe, index) => (
-              <Card.Root key={index}>
-                <Card.Header>
-                  <Card.Title>{recipe.title}</Card.Title>
-                </Card.Header>
-                <Card.Body>
-                  <Text>{recipe.description}</Text>
-                </Card.Body>
-                <Card.Footer>
-                  <Flex gap="4">
-                    <Text color="gray.500">{`Completion time: ${recipe.completionTimeInMinutes} min`}</Text>
-                    <Text color="gray.500">{`Servings: ${recipe.numServings}`}</Text>
-                  </Flex>
-                </Card.Footer>
-              </Card.Root>
+              <GridItem key={index} height="full">
+                <Card.Root height="full">
+                  <Card.Header>
+                    <Card.Title>{recipe.title}</Card.Title>
+                  </Card.Header>
+                  <Card.Body>
+                    <Text>{recipe.description}</Text>
+                  </Card.Body>
+                </Card.Root>
+              </GridItem>
             ))}
-        </Box>
+        </Grid>
       </Box>
     </Flex>
   );

@@ -1,9 +1,7 @@
 import { Button, Card, Center } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function RegisterSuccess() {
-  const navigate = useNavigate();
-
   return (
     <Center padding="4" mt="16">
       <Card.Root
@@ -21,9 +19,9 @@ function RegisterSuccess() {
             Your RecipeDB account has been created. You can now sign in and
             start sharing recipes.
           </Card.Description>
-          <Button width="full" onClick={() => navigate("/login")}>
-            Sign in
-          </Button>
+          <Link to="/login">
+            <Button width="full">Sign in</Button>
+          </Link>
         </Card.Body>
       </Card.Root>
     </Center>

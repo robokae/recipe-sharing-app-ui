@@ -18,9 +18,9 @@ function SignoutSuccess() {
           <Card.Description textAlign="center">
             You are now logged out. Thanks for visiting!
           </Card.Description>
-          <Button width="full">
-            <Link to="/">Home</Link>
-          </Button>
+          <Link to="/">
+            <Button width="full">Home</Button>
+          </Link>
         </Card.Body>
       </Card.Root>
     </Center>

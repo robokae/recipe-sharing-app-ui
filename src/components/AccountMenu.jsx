@@ -1,5 +1,5 @@
 import { Button, Menu, Portal } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function AccountMenu({ user, logout }) {
   const navigate = useNavigate();
@@ -25,9 +25,11 @@ function AccountMenu({ user, logout }) {
       <Portal>
         <Menu.Positioner>
           <Menu.Content>
-            <Menu.Item cursor="pointer" value="profile">
-              Profile
-            </Menu.Item>
+            <Link to={`/profile/${user.username}`}>
+              <Menu.Item cursor="pointer" value="profile">
+                Profile
+              </Menu.Item>
+            </Link>
             <Menu.Item
               cursor="pointer"
               value="sign-out"

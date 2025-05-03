@@ -8,6 +8,7 @@ import RegisterSuccess from "./pages/RegisterSuccess";
 import MainLayout from "./components/layout/MainLayout";
 import SignoutSuccess from "./pages/SignoutSuccess";
 import RecipePage from "./pages/RecipePage";
+import AccountProfile from "./pages/AccountProfile";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         </Route>
         <Route path="/" element={<Home />} />
         <Route path="/recipe/:id" element={<RecipePage />} />
+        <Route path="/profile/:username" element={<AccountProfile />} />
       </Route>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />

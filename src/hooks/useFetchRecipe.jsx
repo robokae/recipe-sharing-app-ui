@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { useApi } from "./useApi";
 import { useFetchFeaturedImage } from "./useFetchFeaturedImage";
 
-export const useFetchRecipe = (id) => {
+export const useFetchRecipe = (id, username) => {
   const { callApi } = useApi();
   const [data, setData] = useState([]);
   const { fetchImage } = useFetchFeaturedImage();
 
   useEffect(() => {
-    const url = id ? `/api/recipe/${id}` : "/api/recipes";
+    let url = `/api/${
+      id ? `recipe/${id}` : username ? `recipes/${username}` : "recipes"
+    }`;
 
     const fetchData = async () => {
       const response = await callApi(url, "GET");
@@ -32,7 +34,7 @@ export const useFetchRecipe = (id) => {
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, username]);
 
   return { data };
 };

@@ -17,7 +17,7 @@ import {
 
 function RecipePage() {
   const { id } = useParams();
-  const { data } = useFetchRecipe(id);
+  const { data } = useFetchRecipe(id, null);
 
   const getFullDate = (date) => {
     return new Date(date).toLocaleDateString("en-us", {
@@ -39,9 +39,9 @@ function RecipePage() {
 
   return (
     data && (
-      <Center>
+      <Center mt="8">
         <Flex width={["full", "full", "2/3", "1/2"]} direction="column" gap="8">
-          <Image src={data.featuredImage} />
+          <Image rounded="sm" src={data.featuredImage} />
           <Stack gap="4">
             <Heading size="3xl">{data.title}</Heading>
             <HStack>

@@ -48,10 +48,10 @@ function RegisterPage() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Flex direction="column" gap="4">
               {mapToFormFieldsFromSchema(registerSchema, register, errors)}
+              <Button type="submit" loading={isSubmitting} width="full" mt="4">
+                Register
+              </Button>
             </Flex>
-            <Button type="submit" loading={isSubmitting} width="full" mt="4">
-              Register
-            </Button>
           </form>
         </Card.Body>
         <Card.Footer flexDirection="column" justifyContent="center">

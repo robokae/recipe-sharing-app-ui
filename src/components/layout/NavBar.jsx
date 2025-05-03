@@ -10,6 +10,7 @@ function NavBar() {
   return (
     <Flex
       position="fixed"
+      height="16"
       width="100%"
       backgroundColor="black"
       borderBottom="1px solid"

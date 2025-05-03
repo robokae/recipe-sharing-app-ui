@@ -7,6 +7,7 @@ import PrivateRoutes from "./components/PrivateRoutes";
 import RegisterSuccess from "./pages/RegisterSuccess";
 import MainLayout from "./components/layout/MainLayout";
 import SignoutSuccess from "./pages/SignoutSuccess";
+import RecipePage from "./pages/RecipePage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/recipe/new" element={<CreateRecipePage />} />
         </Route>
         <Route path="/" element={<Home />} />
+        <Route path="/recipe/:id" element={<RecipePage />} />
       </Route>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />

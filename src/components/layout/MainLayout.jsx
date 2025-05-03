@@ -6,7 +6,7 @@ function MainLayout() {
   return (
     <Flex flexDirection="column">
       <NavBar />
-      <Container mt="32">
+      <Container width="full" mt="16" mb="16">
         <Outlet />
       </Container>
     </Flex>

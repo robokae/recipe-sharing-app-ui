@@ -19,7 +19,7 @@ export const mapToFormFieldsFromSchema = (schema, register, errors) => {
       key={index}
       name={fieldName}
       label={getLabel(fieldName)}
-      type={fieldName.includes("password") ? "password" : "text"}
+      inputType={fieldName.includes("password") ? "password" : "text"}
       register={register}
       errors={errors}
     />

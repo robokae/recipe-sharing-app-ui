@@ -69,7 +69,7 @@ function RecipePage() {
             <Stack gap="4">
               <Heading size="2xl">Ingredients</Heading>
               <List.Root gap="2" marginLeft="4">
-                {data.ingredients?.split(", ").map((ingredient, index) => (
+                {data.ingredients?.split("\n").map((ingredient, index) => (
                   <List.Item key={index}>{ingredient}</List.Item>
                 ))}
               </List.Root>
@@ -77,7 +77,7 @@ function RecipePage() {
             <Stack gap="4">
               <Heading size="2xl">Instructions</Heading>
               <List.Root gap="4" as="ol" marginLeft="4">
-                {data.instructions?.split(", ").map((step, index) => (
+                {data.instructions?.split("\n").map((step, index) => (
                   <List.Item key={index}>{step}</List.Item>
                 ))}
               </List.Root>

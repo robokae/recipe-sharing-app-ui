@@ -1,15 +1,32 @@
-import { Field, Input } from "@chakra-ui/react";
+import { Field, Input, Textarea } from "@chakra-ui/react";
 
-function FormField({ name, label, type, placeholder, register, errors }) {
+function FormField({
+  name,
+  label,
+  fieldType,
+  inputType,
+  placeholder,
+  register,
+  errors,
+}) {
   return (
     <Field.Root invalid={errors[name]}>
       <Field.Label htmlFor={name}>{label && label}</Field.Label>
-      <Input
-        id={name}
-        type={type || "text"}
-        placeholder={placeholder}
-        {...register(name)}
-      />
+      {fieldType === "textarea" ? (
+        <Textarea
+          id={name}
+          placeholder={placeholder}
+          autoresize
+          {...register(name)}
+        />
+      ) : (
+        <Input
+          id={name}
+          type={inputType || "text"}
+          placeholder={placeholder}
+          {...register(name)}
+        />
+      )}
       <Field.ErrorText>{errors[name]?.message}</Field.ErrorText>
     </Field.Root>
   );

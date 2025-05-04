@@ -9,19 +9,27 @@ export const useApi = () => {
       let response;
       if (method === "GET") {
         response = await axios.get(url);
-      } else if (method === "POST") {
+      } else if (method === "POST" || method === "PATCH") {
         const contentType = options?.contentType ?? "application/json";
+
         const requestBody =
           contentType === "multipart/form-data"
             ? payload
             : JSON.stringify(payload);
-        response = await axios.post(url, requestBody, {
-          headers: {
-            "Content-Type": contentType,
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
+
+        const headers = {
+          "Content-Type": contentType,
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        };
+
+        response = await axios.request({
+          method: method,
+          url: url,
+          data: requestBody,
+          headers: headers,
         });
       }
+
       return response;
     } catch (error) {
       return { error: error.response.data || "An unexpected error occurred" };

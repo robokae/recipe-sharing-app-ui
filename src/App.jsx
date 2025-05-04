@@ -9,6 +9,7 @@ import MainLayout from "./components/layout/MainLayout";
 import SignoutSuccess from "./pages/SignoutSuccess";
 import RecipePage from "./pages/RecipePage";
 import AccountProfile from "./pages/AccountProfile";
+import EditRecipePage from "./pages/EditRecipePage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Route element={<MainLayout />}>
         <Route element={<PrivateRoutes />}>
           <Route path="/recipe/new" element={<CreateRecipePage />} />
+          <Route path="/recipe/edit/:id" element={<EditRecipePage />} />
         </Route>
         <Route path="/" element={<Home />} />
         <Route path="/recipe/:id" element={<RecipePage />} />

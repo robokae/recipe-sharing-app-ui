@@ -1,7 +1,7 @@
 import { Flex } from "@chakra-ui/react";
 import SideMenu from "../components/layout/SideMenu";
 import { useFetchRecipe } from "../hooks/useFetchRecipe";
-import RecipeFeed from "../components/RecipeFeed";
+import RecipeFeed from "../components/recipe/RecipeFeed";
 
 function Home() {
   const { data } = useFetchRecipe();

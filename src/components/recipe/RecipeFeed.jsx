@@ -5,7 +5,7 @@ import { useSaveRecipe } from "../../hooks/useSaveRecipe";
 
 function RecipeFeed({ data, title }) {
   const { user } = useAuth();
-  const { savedRecipes, handleSave } = useSaveRecipe(user.username);
+  const { savedRecipes, handleSave } = useSaveRecipe(user?.username);
 
   const handleLike = (recipeId) => {};
 

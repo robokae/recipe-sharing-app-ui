@@ -11,13 +11,13 @@ export const useSaveRecipe = (username) => {
 
   useEffect(() => {
     if (user) {
-      const fetchSavedRecipes = async () => {
+      const fetchSavedRecipes = async (username) => {
         await callApi(`/api/recipes/saved/${username}`, "GET").then((res) => {
           setSavedRecipes(res.data);
         });
       };
 
-      fetchSavedRecipes();
+      fetchSavedRecipes(username);
     }
   }, []);
 

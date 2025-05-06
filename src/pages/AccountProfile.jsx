@@ -41,7 +41,7 @@ function AccountProfile() {
   useEffect(() => {
     setProfileData(null);
     const fetchProfile = async (username) => {
-      const response = await callApi(`/api/profile/${username}`, "GET");
+      const response = await callApi(`/api/profile/summary/${username}`, "GET");
       if (response) {
         setProfileData(response.data);
       }
@@ -76,7 +76,7 @@ function AccountProfile() {
   const profileStats = [
     {
       label: "Joined",
-      value: new Date(profileData?.createdAt).getFullYear(),
+      value: new Date(profileData?.joinDate).getFullYear(),
     },
     {
       label: "Recipes",

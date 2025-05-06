@@ -7,8 +7,11 @@ export const useApi = () => {
   const callApi = async (url, method, payload, options) => {
     try {
       let response;
-      if (method === "GET") {
-        response = await axios.get(url);
+      if (method === "GET" || method === "DELETE") {
+        response = await axios.request({
+          method: method,
+          url: url,
+        });
       } else if (method === "POST" || method === "PATCH") {
         const contentType = options?.contentType ?? "application/json";
 

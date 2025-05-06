@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Center,
+  Container,
   Flex,
   Grid,
   Heading,
@@ -19,14 +20,22 @@ import { Link, useParams } from "react-router-dom";
 import { useFetchRecipe } from "../hooks/useFetchRecipe";
 import { useEffect, useState } from "react";
 import { useApi } from "../hooks/useApi";
-import { HiDotsVertical } from "react-icons/hi";
+import RecipeGrid from "../components/recipe/RecipeGrid";
+import Stats from "../components/profile/Stats";
+import { useSaveRecipe } from "../hooks/useSaveRecipe";
+import { useFetchFeaturedImage } from "../hooks/useFetchFeaturedImage";
 
 function AccountProfile() {
   const { user } = useAuth();
   const { username } = useParams();
   const { callApi } = useApi();
-  const [profileData, setProfileData] = useState(null);
   const { data } = useFetchRecipe(null, username);
+  const { savedRecipes } = useSaveRecipe(username);
+  const { fetchImage } = useFetchFeaturedImage();
+
+  const [profileData, setProfileData] = useState(null);
+  const [savedRecipesData, setSavedRecipesData] = useState([]);
+
   const tabs = ["recipes", username === profileData?.username ? "saved" : null];
 
   useEffect(() => {
@@ -39,6 +48,41 @@ function AccountProfile() {
     };
     fetchProfile(username);
   }, [username]);
+
+  useEffect(() => {
+    if (savedRecipes) {
+      const fetchSavedRecipeFeaturedImages = async () => {
+        for (const savedRecipe of savedRecipes) {
+          savedRecipe.featuredImage = await fetchImage(
+            savedRecipe.featuredImageId
+          );
+        }
+        setSavedRecipesData(savedRecipes);
+      };
+      fetchSavedRecipeFeaturedImages();
+    }
+  }, [savedRecipes]);
+
+  const NoContentMessage = ({ contentName }) => {
+    return (
+      <Flex height="32" justifyContent="center" alignItems="center">
+        <Text color="fg.subtle">
+          You currently do not have any {contentName}.
+        </Text>
+      </Flex>
+    );
+  };
+
+  const profileStats = [
+    {
+      label: "Joined",
+      value: new Date(profileData?.createdAt).getFullYear(),
+    },
+    {
+      label: "Recipes",
+      value: data.length,
+    },
+  ];
 
   return (
     profileData && (
@@ -59,84 +103,34 @@ function AccountProfile() {
               <Text color="fg.subtle">@{profileData.username}</Text>
             </Box>
             {profileData.description && <Text>{profileData.description}</Text>}
-            <HStack gap="4" width={["3/4", "1/2", "1/4"]}>
-              <Stat.Root>
-                <Stat.Label>Joined</Stat.Label>
-                <Stat.ValueText>
-                  {new Date(profileData.createdAt).getFullYear()}
-                </Stat.ValueText>
-              </Stat.Root>
-              <Stat.Root>
-                <Stat.Label>Recipes</Stat.Label>
-                <Stat.ValueText>{data.length}</Stat.ValueText>
-              </Stat.Root>
-            </HStack>
+            <Stats data={profileStats} />
           </Stack>
-          {data.length > 0 && (
-            <Tabs.Root defaultValue="recipes" variant="line">
-              <Tabs.List>
-                {tabs.map((tab, index) => (
-                  <Tabs.Trigger key={index} value={tab}>
-                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  </Tabs.Trigger>
-                ))}
-              </Tabs.List>
-              <Tabs.Content value="recipes">
-                <Grid
-                  templateColumns={[
-                    "repeat(1, 1fr)",
-                    "repeat(2, 1fr)",
-                    "repeat(3, 1fr)",
-                  ]}
-                  gap="4"
-                >
-                  {data.map((recipe, index) => (
-                    <Stack gap="4" key={index}>
-                      <Image
-                        height="48"
-                        objectFit="cover"
-                        src={recipe.featuredImage}
-                      />
-                      <Flex justify="space-between">
-                        <Heading lineClamp="2">
-                          <Link to={`/recipe/${recipe.id}`}>
-                            {recipe.title}
-                          </Link>
-                        </Heading>
-                        {profileData.username === username && (
-                          <Menu.Root positioning={{ placement: "bottom-end" }}>
-                            <Menu.Trigger asChild>
-                              <Button
-                                padding="0"
-                                color="fg.subtle"
-                                variant="plain"
-                              >
-                                <HiDotsVertical />
-                              </Button>
-                            </Menu.Trigger>
-                            <Portal>
-                              <Menu.Positioner>
-                                <Menu.Content>
-                                  <Link to={`/recipe/edit/${recipe.id}`}>
-                                    <Menu.Item cursor="pointer" value="edit">
-                                      Edit
-                                    </Menu.Item>
-                                  </Link>
-                                  <Menu.Item cursor="pointer" value="delete">
-                                    Delete
-                                  </Menu.Item>
-                                </Menu.Content>
-                              </Menu.Positioner>
-                            </Portal>
-                          </Menu.Root>
-                        )}
-                      </Flex>
-                    </Stack>
-                  ))}
-                </Grid>
-              </Tabs.Content>
-            </Tabs.Root>
-          )}
+          <Tabs.Root defaultValue="recipes" variant="line">
+            <Tabs.List marginBottom="4">
+              {tabs.map((tab, index) => (
+                <Tabs.Trigger key={index} value={tab}>
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </Tabs.Trigger>
+              ))}
+            </Tabs.List>
+            <Tabs.Content value="recipes">
+              {data.length === 0 ? (
+                <NoContentMessage contentName="recipes" />
+              ) : (
+                <RecipeGrid
+                  data={data}
+                  editOptions={profileData.username === username}
+                />
+              )}
+            </Tabs.Content>
+            <Tabs.Content value="saved">
+              {savedRecipesData.length === 0 ? (
+                <NoContentMessage contentName="saves" />
+              ) : (
+                <RecipeGrid data={savedRecipesData} />
+              )}
+            </Tabs.Content>
+          </Tabs.Root>
         </Stack>
       </Center>
     )

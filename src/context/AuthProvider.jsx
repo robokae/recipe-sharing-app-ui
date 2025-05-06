@@ -38,6 +38,7 @@ export default function AuthProvider({ children }) {
 
   const logout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("savedRecipes");
     setUser(null);
     setToken(null);
   };

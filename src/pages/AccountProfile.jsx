@@ -24,6 +24,7 @@ import RecipeGrid from "../components/recipe/RecipeGrid";
 import Stats from "../components/profile/Stats";
 import { useSaveRecipe } from "../hooks/useSaveRecipe";
 import { useFetchFeaturedImage } from "../hooks/useFetchFeaturedImage";
+import NoContentPlaceholder from "../components/NoContentPlaceholder";
 
 function AccountProfile() {
   const { user } = useAuth();
@@ -62,16 +63,6 @@ function AccountProfile() {
       fetchSavedRecipeFeaturedImages();
     }
   }, [savedRecipes]);
-
-  const NoContentMessage = ({ contentName }) => {
-    return (
-      <Flex height="32" justifyContent="center" alignItems="center">
-        <Text color="fg.subtle">
-          You currently do not have any {contentName}.
-        </Text>
-      </Flex>
-    );
-  };
 
   const profileStats = [
     {
@@ -115,7 +106,7 @@ function AccountProfile() {
             </Tabs.List>
             <Tabs.Content value="recipes">
               {data.length === 0 ? (
-                <NoContentMessage contentName="recipes" />
+                <NoContentPlaceholder contentName="recipes" />
               ) : (
                 <RecipeGrid
                   data={data}
@@ -125,7 +116,7 @@ function AccountProfile() {
             </Tabs.Content>
             <Tabs.Content value="saved">
               {savedRecipesData.length === 0 ? (
-                <NoContentMessage contentName="saves" />
+                <NoContentPlaceholder contentName="saves" />
               ) : (
                 <RecipeGrid data={savedRecipesData} />
               )}

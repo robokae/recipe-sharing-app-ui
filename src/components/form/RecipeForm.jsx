@@ -85,7 +85,7 @@ function RecipeForm({ id, initialValues }) {
 
     await callApi("/api/recipe", "POST", request, {
       contentType: "multipart/form-data",
-    }).then((res) => res.status === 200 && navigate("/"));
+    }).then((res) => res.status === 204 && navigate("/"));
   };
 
   const patchRecipe = async (request, recipeDetails) => {
@@ -93,7 +93,6 @@ function RecipeForm({ id, initialValues }) {
       "recipeRequest",
       new Blob([JSON.stringify(recipeDetails)], { type: "application/json" })
     );
-    console.log(recipeDetails);
 
     await callApi(`/api/recipe/${id}`, "PATCH", request, {
       contentType: "multipart/form-data",
